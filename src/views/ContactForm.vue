@@ -28,15 +28,10 @@
               />
             </div>
             <div class="column">
-              <div class="field message-field">
-                <label class="label">Message</label>
-                <div class="control">
-                  <textarea
-                    class="textarea is-primary"
-                    placeholder="Message"
-                  ></textarea>
-                </div>
-              </div>
+              <BaseTextarea 
+                v-model="contact.message"
+                label="Message"
+              />
             </div>
           </div>
           <div class="field">
@@ -69,17 +64,20 @@
 
 <script>
 import BaseInput from '../components/BaseInput.vue'
+import BaseTextarea from '../components/BaseTextarea.vue'
 
 export default {
   components: {
-    BaseInput
+    BaseInput,
+    BaseTextarea
   },
   data() {
     return {
       contact: {
         name: '',
         mail: '',
-        phone: ''
+        phone: '',
+        message: ''
       }
     }
   }
