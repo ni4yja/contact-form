@@ -63,14 +63,8 @@
 </template>
 
 <script>
-import BaseInput from '../components/BaseInput.vue'
-import BaseTextarea from '../components/BaseTextarea.vue'
 
 export default {
-  components: {
-    BaseInput,
-    BaseTextarea
-  },
   data() {
     return {
       contact: {
