@@ -8,7 +8,7 @@
           </figure>
         </div>
         <div class="card-content column is-three-fifths p-6">
-          <p class="title">Contact us, please</p>
+          <p class="title">Contact us</p>
           <div class="columns mt-4">
             <div class="column">
               <BaseInput v-model="contact.name" label="Name" type="text" />
