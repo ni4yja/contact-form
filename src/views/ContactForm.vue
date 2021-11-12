@@ -11,58 +11,20 @@
           <p class="title">Contact us</p>
           <div class="columns mt-4">
             <div class="column">
-              <BaseInput 
-                v-model="contact.name"
-                label="Name"
-                type="text"
-              />
-              <BaseInput 
-                v-model="contact.mail"
-                label="Mail"
-                type="email"
-              />
-            <BaseInput 
-                v-model="contact.phone"
-                label="Phone"
-                type="tel"
-              />
+              <BaseInput v-model="contact.name" label="Name" type="text" />
+              <BaseInput v-model="contact.mail" label="Mail" type="email" />
+              <BaseInput v-model="contact.phone" label="Phone" type="tel" />
             </div>
             <div class="column">
-              <BaseTextarea 
-                v-model="contact.message"
-                label="Message"
-              />
+              <BaseTextarea v-model="contact.message" label="Message" />
             </div>
           </div>
-          <div class="field">
-            <label class="label">Services</label>
-            <div class="control">
-              <BaseRadio 
-                v-model="contact.services"
-                :value="0"
-                label="Web Design"
-                name="services"
-              />
-              <BaseRadio 
-                v-model="contact.services"
-                :value="1"
-                label="Web Development"
-                name="services"
-              />
-              <BaseRadio 
-                v-model="contact.services"
-                :value="2"
-                label="Graphic Design"
-                name="services"
-              />
-              <BaseRadio 
-                v-model="contact.services"
-                :value="3"
-                label="Logo"
-                name="services"
-              />
-            </div>
-          </div>
+          <BaseRadioGroup
+            v-model="contact.services"
+            label="Services"
+            name="services"
+            :options="services"
+          />
           <button class="button is-primary mt-4">Send Message</button>
         </div>
       </div>
@@ -71,22 +33,29 @@
 </template>
 
 <script>
+import BaseRadioGroup from "../components/BaseRadioGroup.vue";
 
 export default {
   data() {
     return {
       contact: {
-        name: '',
-        mail: '',
-        phone: '',
-        message: '',
+        name: "",
+        mail: "",
+        phone: "",
+        message: "",
         services: 0
-      }
-    }
-  }
-}
+      },
+      services: [
+        { label: 'Web Design', value: 0 },
+        { label: 'Web Development', value: 1 },
+        { label: 'Graphic Design', value: 2 },
+        { label: 'Logo', value: 3 }
+      ]
+    };
+  },
+  components: { BaseRadioGroup },
+};
 </script>
 
 <style>
-
 </style>
