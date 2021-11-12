@@ -8,7 +8,6 @@ $label-color: $blue;
 body {
   background: rgb(202,224,224);
   background: linear-gradient(150deg, rgba(202,224,224,1) 0%, rgba(241,217,212,1) 60%);
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,6 +15,21 @@ body {
 
 .card {
   color: $blue;
+
+  &.columns {
+    margin: 0;
+  }
+}
+
+.card-image {
+  .image {
+    height: 20rem;
+
+    img {
+      height: inherit;
+      object-fit: cover;
+    }
+  }
 }
 
 .title {
@@ -31,5 +45,22 @@ body {
     .textarea {
       height: calc(100% - 2rem);
     } 
+  }
+}
+
+@media screen and (min-width: 800px) {
+  body {
+    height: 100vh;
+  }
+
+  .card-image {
+    .image {
+      height: auto;
+  
+      img {
+        height: auto;
+        object-fit: cover;
+      }
+    }
   }
 }

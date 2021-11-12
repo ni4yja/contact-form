@@ -37,22 +37,30 @@
           <div class="field">
             <label class="label">Services</label>
             <div class="control">
-              <label class="radio">
-                <input type="radio" name="answer" checked>
-                Web Design
-              </label>
-              <label class="radio">
-                <input type="radio" name="answer">
-                Web Development
-              </label>
-              <label class="radio">
-                <input type="radio" name="answer">
-                Graphic Design
-              </label>
-              <label class="radio">
-                <input type="radio" name="answer">
-                Logo
-              </label>
+              <BaseRadio 
+                v-model="contact.services"
+                :value="0"
+                label="Web Design"
+                name="services"
+              />
+              <BaseRadio 
+                v-model="contact.services"
+                :value="1"
+                label="Web Development"
+                name="services"
+              />
+              <BaseRadio 
+                v-model="contact.services"
+                :value="2"
+                label="Graphic Design"
+                name="services"
+              />
+              <BaseRadio 
+                v-model="contact.services"
+                :value="3"
+                label="Logo"
+                name="services"
+              />
             </div>
           </div>
           <button class="button is-primary mt-4">Send Message</button>
@@ -71,7 +79,8 @@ export default {
         name: '',
         mail: '',
         phone: '',
-        message: ''
+        message: '',
+        services: 0
       }
     }
   }
