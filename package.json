@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "bulma": "^0.9.3",
     "core-js": "^3.6.5",
     "lodash.camelcase": "^4.3.0",
