@@ -12,20 +12,41 @@
           <form @submit.prevent="sendForm">
             <div class="columns mt-4">
               <div class="column">
-                <BaseInput v-model="contact.name" label="Name" type="text" />
-                <BaseInput v-model="contact.mail" label="Mail" type="email" />
-                <BaseInput v-model="contact.phone" label="Phone" type="tel" />
+                <fieldset>
+                  <legend>Personal Info</legend>
+                  <BaseInput 
+                    v-model="contact.name" 
+                    label="Name" 
+                    type="text"
+                  />
+                  <BaseInput 
+                    v-model="contact.mail" 
+                    label="Mail"
+                    type="email"
+                  />
+                  <BaseInput 
+                    v-model="contact.phone"
+                    label="Phone"
+                    type="tel"
+                  />
+                </fieldset>
               </div>
               <div class="column">
-                <BaseTextarea v-model="contact.message" label="Message" />
+                <fieldset>
+                  <legend>Message</legend>
+                  <BaseTextarea v-model="contact.message" label="Message" />
+                </fieldset>
               </div>
             </div>
-            <BaseRadioGroup
-              v-model="contact.services"
-              label="Services"
-              name="services"
-              :options="services"
-            />
+            <fieldset>
+              <legend>Services</legend>
+              <BaseRadioGroup
+                v-model="contact.services"
+                label="Services"
+                name="services"
+                :options="services"
+              />
+            </fieldset>
             <button type="submit" class="button is-primary mt-4">Send Message</button>
           </form>
         </div>
