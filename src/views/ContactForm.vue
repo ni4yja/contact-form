@@ -9,7 +9,7 @@
         </div>
         <div class="card-content column is-three-fifths p-6">
           <p class="title">Contact us</p>
-          <form @submit.prevent="sendForm">
+          <form @submit.prevent="onSubmit">
             <div class="columns mt-4">
               <div class="column">
                 <fieldset>
@@ -20,7 +20,8 @@
                     type="text"
                   />
                   <BaseInput 
-                    v-model="contact.mail" 
+                    v-model="email" 
+                    :error="emailError"
                     label="Mail"
                     type="email"
                   />
@@ -57,6 +58,7 @@
 
 <script>
 import axios from 'axios'
+import { useField } from 'vee-validate'
 export default {
   data() {
     return {
@@ -74,6 +76,28 @@ export default {
         { label: 'Logo', value: 3 }
       ]
     };
+  },
+  setup () {
+    function onSubmit () {
+      alert('Submitted')
+    }
+
+    const { value: email, errorMessage: emailError } = useField('email', function (value) {
+      if (!value) return 'This field is required'
+
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        if (!regex.test(String(value).toLowerCase())) {
+          return 'Please enter a valid email address'
+        }
+
+      return true
+    })
+
+    return {
+      onSubmit,
+      email: email,
+      emailError: emailError
+    }
   },
   methods: {
     sendForm () {
