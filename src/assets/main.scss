@@ -57,19 +57,36 @@ legend {
   }
 }
 
-@media screen and (min-width: 800px) {
+.all-errors {
+  .message-field {
+    .control {
+      .textarea {
+        height: calc(100% - 3.4rem);
+      } 
+    }
+  }
+}
+
+@media screen and (min-width: 769px) {
   body {
     height: 100vh;
   }
 
   .card-image {
     .image {
-      height: auto;
-  
-      img {
-        height: auto;
-        object-fit: cover;
-      }
+      height: 100%;
     }
+  }
+}
+
+@media screen and (min-width: 800px) and (orientation: landscape) {
+  body {
+    height: 100%;
+  }
+}
+
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+  body {
+    height: 100vh;
   }
 }

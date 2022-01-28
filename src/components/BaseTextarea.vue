@@ -3,12 +3,22 @@
     <label :for="uuid" class="label">{{ label }}</label>
     <div class="control">
       <textarea
+        :class="{'is-danger': error}"
         class="textarea is-primary"
         :placeholder="label"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
         :id="uuid"
-      ></textarea>
+      >
+      </textarea>
+      <p
+        v-if="error"
+        class="help is-danger"
+        :id="`${uuid}-error`"
+        aria-live="assertive"
+      >
+       {{ error }}
+      </p>
     </div>
   </div>
 </template>
@@ -25,6 +35,10 @@ export default {
     },
     modelValue: {
       type: [String, Number],
+      default: ''
+    },
+    error: {
+      type: String,
       default: ''
     }
   },

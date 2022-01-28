@@ -9,24 +9,31 @@
         </div>
         <div class="card-content column is-three-fifths p-6">
           <p class="title">Contact us</p>
-          <form @submit.prevent="onSubmit">
+          <form
+            :class="{'all-errors' : allErrors }"
+            @submit="submit">
             <div class="columns mt-4">
               <div class="column">
                 <fieldset>
                   <legend>Personal Info</legend>
                   <BaseInput 
-                    v-model="contact.name" 
+                    :class="{'is-danger': errors.userName}"
+                    v-model="userName" 
+                    :error="errors.userName"
                     label="Name" 
                     type="text"
                   />
-                  <BaseInput 
+                  <BaseInput
+                    :class="{'is-danger': errors.email}"
                     v-model="email" 
-                    :error="emailError"
+                    :error="errors.email"
                     label="Mail"
                     type="email"
                   />
-                  <BaseInput 
-                    v-model="contact.phone"
+                  <BaseInput
+                    :class="{'is-danger': errors.phone}"
+                    v-model="phone" 
+                    :error="errors.phone"
                     label="Phone"
                     type="tel"
                   />
@@ -35,17 +42,22 @@
               <div class="column">
                 <fieldset>
                   <legend>Message</legend>
-                  <BaseTextarea v-model="contact.message" label="Message" />
+                  <BaseTextarea
+                    v-model="message" 
+                    :error="errors.message"
+                    label="Message"
+                  />
                 </fieldset>
               </div>
             </div>
             <fieldset>
               <legend>Services</legend>
               <BaseRadioGroup
-                v-model="contact.services"
+                v-model="services"
+                :error="services.error"
                 label="Services"
                 name="services"
-                :options="services"
+                :options="servicesOptions"
               />
             </fieldset>
             <button type="submit" class="button is-primary mt-4">Send Message</button>
@@ -58,18 +70,11 @@
 
 <script>
 import axios from 'axios'
-import { useField } from 'vee-validate'
+import { useForm, useField } from 'vee-validate'
 export default {
   data() {
     return {
-      contact: {
-        name: "",
-        mail: "",
-        phone: "",
-        message: "",
-        services: 0
-      },
-      services: [
+      servicesOptions: [
         { label: 'Web Design', value: 0 },
         { label: 'Web Development', value: 1 },
         { label: 'Graphic Design', value: 2 },
@@ -77,42 +82,137 @@ export default {
       ]
     };
   },
+  computed: {
+    allErrors() {
+      return this.errors.userName
+        && this.errors.email
+        && this.errors.phone
+        && this.errors.message;
+    },
+  },
   setup () {
-    function onSubmit () {
-      alert('Submitted')
-    }
-
-    const { value: email, errorMessage: emailError } = useField('email', function (value) {
-      if (!value) return 'This field is required'
-
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if (!regex.test(String(value).toLowerCase())) {
-          return 'Please enter a valid email address'
-        }
+    const required = value => {
+      const requiredMessage = 'This field is required'
+      if (value === undefined || value === null) return requiredMessage
+      if (!String(value).length) return requiredMessage
 
       return true
+    }
+
+    const emailCheck = value => {
+      const requiredMessage = 'Please enter a valid email address'
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      if (!regex.test(String(value).toLowerCase())) {
+        return requiredMessage
+      }
+
+      return true
+    }
+
+    const phoneCheck = value => {
+      const requiredMessage = 'Please enter a valid phone number'
+      const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+      if (!regex.test(String(value).toLowerCase())) {
+        return requiredMessage
+      }
+
+      return true
+    }
+
+    const minLength = (number, value) => {
+      if (String(value).length < number) return 'Please type at least ' + number + ' characters'
+
+      return true
+    }
+
+    const maxLength = (number, value) => {
+      if (String(value).length > number) return 'Please try to fit into ' + number + ' characters'
+
+      return true
+    }
+
+    const anything = () => {
+      return true
+    }
+
+    const validationSchema = {
+      userName: (value) => {
+        const req = required(value)
+        if (req !== true) return req
+
+        const min = minLength(2, value)
+        if (min !== true) return min
+
+        return true
+      },
+
+      email: (value) => {
+        const req = required(value)
+        if (req !== true) return req
+
+        const validEmail = emailCheck(value)
+        if (validEmail !== true) return validEmail
+
+        return true
+      },
+
+      phone: (value) => {
+        const validPhone = phoneCheck(value)
+        if (validPhone !== true) return validPhone
+        
+        return true
+      },
+      
+      message: (value) => {
+        const min = minLength(100, value)
+        if (min !== true) return min
+
+        const max = maxLength(500, value)
+        if (max !== true) return max
+
+        return true
+      },
+
+      services: anything
+    }
+
+    const { handleSubmit, errors } = useForm({
+      validationSchema,
+      initialValues: {
+        services: 0
+      }
     })
 
-    return {
-      onSubmit,
-      email: email,
-      emailError: emailError
-    }
-  },
-  methods: {
-    sendForm () {
+    const { value: userName } = useField('userName')
+    const { value: email } = useField('email')
+    const { value: phone } = useField('phone')
+    const { value: message } = useField('message')
+    const { value: services } = useField('services')
+
+    const submit = handleSubmit((values, actions) => { 
       axios.post(
         'https://my-json-server.typicode.com/ni4yja/contact-form/contact',
-        this.contact
+        values
       )
         .then(function (response) {
           console.log('Response', response)
+          actions.resetForm()
         })
         .catch(function (err) {
           console.log('Error', err)
         })
+    })
+
+    return {
+      submit,
+      userName,
+      email,
+      phone,
+      message,
+      services,
+      errors
     }
-  }
+  },
 };
 </script>
 
